@@ -8,7 +8,7 @@ namespace OneTimePassword
 {
     public class OtpService
     {
-        public string GetOtp(string account)
+        public virtual string GetOtp(string account)
         {
             var httpClient = new HttpClient() {BaseAddress = new Uri("webapi")};
 
@@ -26,7 +26,7 @@ namespace OneTimePassword
 
     public class UserRepo
     {
-        public string GetPasswordFromDb(string account)
+        public virtual string GetPasswordFromDb(string account)
         {
             var passwordFromDb = String.Empty;
 
