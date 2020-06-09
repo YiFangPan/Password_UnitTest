@@ -23,10 +23,10 @@ namespace OneTimePassword.UnitTests
         [Test]
         public void Valid_Password_Using_NSub()
         {
-            var repo = Substitute.For<UserRepo>();
+            var repo = Substitute.For<IUserRepo>();
             repo.GetPasswordFromDb("Yvonne").Returns("abc");
             
-            var otp = Substitute.For<OtpService>();
+            var otp = Substitute.For<IOtpService>();
             otp.GetOtp("Yvonne").Returns("123");
 
             var authenticationService = new AuthenticationService(otp, repo);
@@ -36,9 +36,9 @@ namespace OneTimePassword.UnitTests
         }
     }
 
-    public class FakeRepo : UserRepo
+    public class FakeRepo : IUserRepo
     {
-        public override string GetPasswordFromDb(string account)
+        public string GetPasswordFromDb(string account)
         {
             if (account == "Yvonne")
                 return "abc";
@@ -46,9 +46,9 @@ namespace OneTimePassword.UnitTests
         }
     }
 
-    public class FakeService : OtpService
+    public class FakeService : IOtpService
     {
-        public override string GetOtp(string account)
+        public string GetOtp(string account)
         {
             if (account == "Yvonne")
                 return "123";

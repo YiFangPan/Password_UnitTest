@@ -6,9 +6,14 @@ using System.Net.Http;
 
 namespace OneTimePassword
 {
-    public class OtpService
+    public interface IOtpService
     {
-        public virtual string GetOtp(string account)
+        string GetOtp(string account);
+    }
+
+    public class OtpService : IOtpService
+    {
+        public string GetOtp(string account)
         {
             var httpClient = new HttpClient() {BaseAddress = new Uri("webapi")};
 
@@ -24,9 +29,14 @@ namespace OneTimePassword
         }
     }
 
-    public class UserRepo
+    public interface IUserRepo
     {
-        public virtual string GetPasswordFromDb(string account)
+        string GetPasswordFromDb(string account);
+    }
+
+    public class UserRepo : IUserRepo
+    {
+        public string GetPasswordFromDb(string account)
         {
             var passwordFromDb = String.Empty;
 
@@ -46,10 +56,10 @@ namespace OneTimePassword
 
     public class AuthenticationService
     {
-        private readonly OtpService _otpService;
-        private readonly UserRepo _userRepo;
+        private readonly IOtpService _otpService;
+        private readonly IUserRepo _userRepo;
 
-        public AuthenticationService(OtpService service, UserRepo repo)
+        public AuthenticationService(IOtpService service, IUserRepo repo)
         {
             _otpService = service;
             _userRepo = repo;
