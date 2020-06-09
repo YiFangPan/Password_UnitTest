@@ -1,4 +1,4 @@
-## [Unit Test] Valid one-time password 
+## [Unit Test] Valid Password
 
 ### Purpose 
 1. How could you write unit test before you get the web api?
