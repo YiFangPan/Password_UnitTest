@@ -19,6 +19,21 @@ namespace OneTimePassword.UnitTests
             
             Assert.IsTrue(result);
         }
+        
+        [Test]
+        public void Valid_Password_Using_NSub()
+        {
+            var repo = Substitute.For<UserRepo>();
+            repo.GetPasswordFromDb("Yvonne").Returns("abc");
+            
+            var otp = Substitute.For<OtpService>();
+            otp.GetOtp("Yvonne").Returns("123");
+
+            var authenticationService = new AuthenticationService(otp, repo);
+            var result = authenticationService.IsValid("Yvonne", "abc123");
+            
+            Assert.IsTrue(result);
+        }
     }
 
     public class FakeRepo : UserRepo
