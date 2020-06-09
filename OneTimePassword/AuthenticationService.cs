@@ -6,18 +6,9 @@ using System.Net.Http;
 
 namespace OneTimePassword
 {
-    public class AuthenticationService
+    public class OtpService
     {
-        public bool IsValid(String account, String password)
-        {
-            var passwordFromDb = GetPasswordFromDb(account);
-
-            var otp = GetOtp(account);
-
-            return String.Equals(password, $"{passwordFromDb}{otp}");
-        }
-
-        private static string GetOtp(string account)
+        public string GetOtp(string account)
         {
             var httpClient = new HttpClient() {BaseAddress = new Uri("webapi")};
 
@@ -31,8 +22,11 @@ namespace OneTimePassword
             var otp = response.Content.ReadAsAsync<String>().Result;
             return otp;
         }
+    }
 
-        private static string GetPasswordFromDb(string account)
+    public class UserRepo
+    {
+        public string GetPasswordFromDb(string account)
         {
             var passwordFromDb = String.Empty;
 
@@ -47,6 +41,21 @@ namespace OneTimePassword
             }
 
             return passwordFromDb;
+        }
+    }
+
+    public class AuthenticationService
+    {
+        private readonly OtpService _otpService = new OtpService();
+        private readonly UserRepo _userRepo = new UserRepo();
+
+        public bool IsValid(String account, String password)
+        {
+            var passwordFromDb = _userRepo.GetPasswordFromDb(account);
+
+            var otp = _otpService.GetOtp(account);
+
+            return String.Equals(password, $"{passwordFromDb}{otp}");
         }
     }
 }
