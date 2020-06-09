@@ -46,9 +46,15 @@ namespace OneTimePassword
 
     public class AuthenticationService
     {
-        private readonly OtpService _otpService = new OtpService();
-        private readonly UserRepo _userRepo = new UserRepo();
+        private readonly OtpService _otpService;
+        private readonly UserRepo _userRepo;
 
+        public AuthenticationService(OtpService service, UserRepo repo)
+        {
+            _otpService = service;
+            _userRepo = repo;
+        }
+        
         public bool IsValid(String account, String password)
         {
             var passwordFromDb = _userRepo.GetPasswordFromDb(account);
